@@ -10,13 +10,16 @@ public class ATPService {
 		servicesStructure.setCardNumber(data.substring(2, 12));
 		servicesStructure.setCardType(Integer.parseInt(data.substring(12, 14)));
 		if(servicesStructure.getOperationType()==1) {
-			response =  "Activation Successful";
+			response =  "00SUCCESS         ";
+			System.out.println("Activation Successful");
 		}
 		else if(servicesStructure.getOperationType()==2) {
-			response =  "Cancelation Successful";
+			response =  "33SUCCESS         ";
+			System.out.println("Cancelation Successful");
 		}
 		else {
-			response = "Operation not known.";
+			response = "87OPERATION FAILED";
+			System.out.println("Operation not known.");
 		}
 		return response;		
 	}
