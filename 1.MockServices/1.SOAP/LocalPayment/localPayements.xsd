@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://LocalPayments/systems"
+	xmlns:ns2="http://LocalPayments/systems" elementFormDefault="qualified">
+	<xsd:element name="createPayment">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="request" type="ns2:requestType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="requestType">
+		<xsd:sequence>
+			<xsd:element name="office" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="source" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="source" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="target" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="target" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="payment" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="date" type="xsd:string" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element name="operation" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="createPaymentResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="response" type="ns2:responseType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="responseType">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:int" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element name="message" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="cancelPayment">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="request" type="ns2:cancelRequestType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="cancelRequestType">
+		<xsd:sequence>
+			<xsd:element name="office-line-code" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="date" type="xsd:dateTime"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="operation-identifier" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="cancelPaymentResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="response" type="ns2:responseType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

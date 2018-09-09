@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="01536262-c885-4bbe-a7e6-603262686cc1" activeEnvironment="Default" name="LocalPayments" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="7c22b2e5-2561-4faf-842a-0126b8ebfe0c" wsaVersion="NONE" name="LocalPaymentsSOAP" type="wsdl" bindingName="{http://LocalPayments/systems}LocalPaymentsSOAP" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/marco.caipe/Desktop/LocalPayments.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\Users\marco.caipe\Desktop\LocalPayments.wsdl"><con:part><con:url>file:\C:\Users\marco.caipe\Desktop\LocalPayments.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="LocalPayments" targetNamespace="http://LocalPayments/systems" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://LocalPayments/systems" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema xmlns:tns="http://LocalPayments/systems">
+      <xsd:import namespace="http://LocalPayments/systems" schemaLocation="localPayements.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="createPaymentRequest">
+    <wsdl:part element="ns2:createPayment" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="createPaymentResponse">
+    <wsdl:part element="ns2:createPaymentResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="cancelPaymentRequest">
+    <wsdl:part element="ns2:cancelPayment" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="cancelPaymentResponse">
+    <wsdl:part element="ns2:cancelPaymentResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="LocalPayments">
+    <wsdl:operation name="createPayment">
+      <wsdl:input message="ns2:createPaymentRequest"/>
+      <wsdl:output message="ns2:createPaymentResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="cancelPayment">
+      <wsdl:input message="ns2:cancelPaymentRequest"/>
+      <wsdl:output message="ns2:cancelPaymentResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LocalPaymentsSOAP" type="ns2:LocalPayments">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createPayment">
+      <soap:operation soapAction="http://LocalPayments/systems/createPayment"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelPayment">
+      <soap:operation soapAction="http://LocalPayments/systems/cancelPayment"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LocalPayments">
+    <wsdl:port binding="ns2:LocalPaymentsSOAP" name="LocalPaymentsSOAP">
+      <soap:address location="http://localhost:7001/web-sandbox-api/endpoints/local-payments-1.0.0"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\Users\marco.caipe\Desktop\localPayements.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://LocalPayments/systems" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://LocalPayments/systems">
+  <xsd:element name="createPayment">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="request" type="ns2:requestType" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="requestType">
+    <xsd:sequence>
+      <xsd:element name="office" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="source" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="source" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="target" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="target" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="payment" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="date" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="operation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="createPaymentResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="response" type="ns2:responseType" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="responseType">
+    <xsd:sequence>
+      <xsd:element name="code" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cancelPayment">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="request" type="ns2:cancelRequestType" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="cancelRequestType">
+    <xsd:sequence>
+      <xsd:element name="office-line-code" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="date" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="operation-identifier" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="cancelPaymentResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="response" type="ns2:responseType" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://CPX-3VT7BQJMI94:8088/web-sandbox-api/endpoints/local-payments-1.0.0"</con:endpoint><con:endpoint>http://localhost:8088/web-sandbox-api/endpoints/local-payments-1.0.0</con:endpoint></con:endpoints><con:operation id="9d15af6f-084d-42c6-bdd1-a3817d6209ea" isOneWay="false" action="http://LocalPayments/systems/cancelPayment" name="cancelPayment" bindingOperationName="cancelPayment" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="29c95476-7615-43aa-ab55-3fcd083e16c9" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8088/web-sandbox-api/endpoints/local-payments-1.0.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sys="http://LocalPayments/systems">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <sys:cancelPayment>\r
+         <sys:request>\r
+            <sys:office-line-code>13</sys:office-line-code>\r
+            <sys:date>2018-08-08</sys:date>\r
+            <sys:operation-identifier>1</sys:operation-identifier>\r
+         </sys:request>\r
+      </sys:cancelPayment>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://LocalPayments/systems/cancelPayment"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="502c3f78-2336-4e58-97cc-809752ce71c9" isOneWay="false" action="http://LocalPayments/systems/createPayment" name="createPayment" bindingOperationName="createPayment" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d1240420-0737-41c8-9951-51c3179fdd19" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8088/web-sandbox-api/endpoints/local-payments-1.0.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sys="http://LocalPayments/systems">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <sys:createPayment>\r
+         <sys:request>\r
+            <sys:office>a</sys:office>\r
+            <sys:source>a</sys:source>\r
+            <sys:source>a</sys:source>\r
+            <sys:target>a</sys:target>\r
+            <sys:target>a</sys:target>\r
+            <sys:payment>1</sys:payment>\r
+            <sys:date>08-08-2018</sys:date>\r
+            <sys:operation>1</sys:operation>\r
+         </sys:request>\r
+      </sys:createPayment>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://LocalPayments/systems/createPayment"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="1ca3e62d-ac37-4a79-aac5-a134686f6c19" port="8088" path="/web-sandbox-api/endpoints/local-payments-1.0.0" host="localhost" name="LocalPaymentsSOAP MockService" bindToHostOnly="false" docroot=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="cancelPayment" id="874ca04d-b2f8-4cd7-a99b-1e70fefc3f55" interface="LocalPaymentsSOAP" operation="cancelPayment"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="7e033307-df86-4f6b-922c-efb1f36e4679" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sys="http://LocalPayments/systems">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sys:cancelPaymentResponse>
+         <sys:response>
+            <sys:code>0</sys:code>
+            <sys:message>Exitoso</sys:message>
+         </sys:response>
+      </sys:cancelPaymentResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://LocalPayments/systems/cancelPayment"/></con:response><con:dispatchConfig/></con:mockOperation><con:mockOperation name="createPayment" id="161de198-c5a7-4945-8886-fd39a47435e0" interface="LocalPaymentsSOAP" operation="createPayment"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="ebdce38e-5ecd-4132-9a83-84fd5df80b19" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sys="http://LocalPayments/systems">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sys:createPaymentResponse>
+         <sys:response>
+            <sys:code>0</sys:code>
+            <sys:message>Exitoso</sys:message>
+         </sys:response>
+      </sys:createPaymentResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://LocalPayments/systems/createPayment"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
