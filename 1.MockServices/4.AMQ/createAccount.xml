@@ -1,0 +1,9 @@
+<sys:createAccount xmlns:sys="http://StratusAccount/systems">
+   <sys:request>
+      <sys:name>Juanito</sys:name>
+      <sys:lastName>Perez</sys:lastName>
+      <sys:id>10890765</sys:id>
+      <sys:idType>01</sys:idType>
+      <sys:accountType>01</sys:accountType>
+   </sys:request>
+</sys:createAccount>
