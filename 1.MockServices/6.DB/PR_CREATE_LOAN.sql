@@ -1,4 +1,8 @@
-CREATE OR REPLACE PROCEDURE PR_CREATE_LOAN (P_USER IN VARCHAR2 DEFAULT USER
+CREATE OR REPLACE PROCEDURE PR_CREATE_LOAN (P_USER IN VARCHAR2 DEFAULT USER,
+                                            P_TYPE_ID_PEOPLE IN VARCHAR2,
+					    P_ID_PEOPLE IN VARCHAR2,
+					    P_AMOUNT_LOAD IN NUMBER,
+					    P_DESCRIPTION_LOAD IN VARCHAR2
 )  AUTHID CURRENT_USER IS
 /******************************************************************************
    NAME:       PR_CREATE_LOAN
@@ -65,7 +69,7 @@ begin
    DBMS_OUTPUT.PUT_LINE(v_comment_);
    Commit;
    --execute immediate ('TRUNCATE TABLE STG.T_LOAN');
-/*    INSERT INTO STG.T_LOAN (ID_LOAD,
+    INSERT INTO STG.T_LOAN (ID_LOAD,
                            TYPE_ID_PEOPLE,
 						   ID_PEOPLE,
 						   DATE_INSERT_LOAD,
@@ -78,7 +82,7 @@ begin
 						   TRUNC(SYSDATE),
                            P_AMOUNT_LOAD,
 						   P_DESCRIPTION_LOAD,
-						   1); */
+						   1);
 
    v_total_inserted_rows := v_total_inserted_rows + SQL%ROWCOUNT;
    v_comment_ := 'Registros insertados: '|| TO_CHAR(v_total_inserted_rows);
