@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LocalPayments"
+	xmlns:ns2="http://LocalPayments/systems"
+	targetNamespace="http://LocalPayments/systems"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xsd:schema xmlns:tns="http://LocalPayments/systems">
+			<xsd:import namespace="http://LocalPayments/systems"
+				schemaLocation="localPayements.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="createPaymentRequest">
+		<wsdl:part element="ns2:createPayment" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="createPaymentResponse">
+		<wsdl:part element="ns2:createPaymentResponse"
+			name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="cancelPaymentRequest">
+		<wsdl:part element="ns2:cancelPayment" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="cancelPaymentResponse">
+		<wsdl:part element="ns2:cancelPaymentResponse"
+			name="parameters" />
+	</wsdl:message>
+	<wsdl:portType name="LocalPayments">
+		<wsdl:operation name="createPayment">
+			<wsdl:input message="ns2:createPaymentRequest" />
+			<wsdl:output message="ns2:createPaymentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="cancelPayment">
+			<wsdl:input message="ns2:cancelPaymentRequest" />
+			<wsdl:output message="ns2:cancelPaymentResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="LocalPaymentsSOAP"
+		type="ns2:LocalPayments">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="createPayment">
+			<soap:operation
+				soapAction="http://LocalPayments/systems/createPayment" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelPayment">
+			<soap:operation
+				soapAction="http://LocalPayments/systems/cancelPayment" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="LocalPayments">
+		<wsdl:port binding="ns2:LocalPaymentsSOAP"
+			name="LocalPaymentsSOAP">
+			<soap:address location="http://localhost:7001/web-sandbox-api/endpoints/local-payments-1.0.0" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

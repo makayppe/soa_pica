@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ScoreValidation"
+	xmlns:ns2="http://ScoreValidation/systems"
+	targetNamespace="http://ScoreValidation/systems"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xsd:schema xmlns:tns="http://ScoreValidation/systems">
+			<xsd:import namespace="http://ScoreValidation/systems"
+				schemaLocation="ScoreValidation.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="getScoreRequest">
+		<wsdl:part element="ns2:getScore" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="getScoreResponse">
+		<wsdl:part element="ns2:getScoreResponse"
+			name="parameters" />
+	</wsdl:message>
+
+	<wsdl:portType name="ScoreValidation">
+		<wsdl:operation name="getScore">
+			<wsdl:input message="ns2:getScoreRequest" />
+			<wsdl:output message="ns2:getScoreResponse" />
+		</wsdl:operation>
+
+	</wsdl:portType>
+	<wsdl:binding name="ScoreValidationSOAP"
+		type="ns2:ScoreValidation">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getScore">
+			<soap:operation
+				soapAction="http://ScoreValidation/systems/getScore" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ScoreValidation">
+		<wsdl:port binding="ns2:ScoreValidationSOAP"
+			name="ScoreValidationSOAP">
+			<soap:address location="http://localhost:7001/web-sandbox-api/endpoints/score-validator-1.0.0" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ScoreValidation/systems"
+	xmlns:ns2="http://ScoreValidation/systems" elementFormDefault="qualified">
+	<xsd:element name="getScore">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="request" type="ns2:requestType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="requestType">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="idType" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="getScoreResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="response" type="ns2:responseType"
+					minOccurs="1" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="responseType">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:int" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element name="idType" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="score" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />	
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
