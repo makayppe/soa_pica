@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="23e3768f-5fae-4dc4-ad1b-dff58e74bf27" activeEnvironment="Default" name="Mock_ACH" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:restMockService id="04965fdc-db45-4e79-a0a8-bb8a3265a22c" port="9080" path="/" host="YESELINPC" name="REST_NacionalPaymentsACH" docroot=""><con:settings/><con:properties/><con:restMockAction name="/NacionalPaymentsACH/AddPayments" method="POST" resourcePath="/NacionalPaymentsACH/AddPayments" id="9cf466e9-fdf1-4e36-b3ea-531d0c4b82ba"><con:settings/><con:defaultResponse>ResponseAdd</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:dispatchPath>/*
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on path
+def requestPath = mockRequest.getPath()
+log.info "Path: "+ requestPath
+
+if( requestPath.contains("json") )
+{
+    // return the name of the response you want to dispatch
+    return "JSON Response"
+}
+
+
+// Match based on query parameter
+def queryString = mockRequest.getRequest().getQueryString()
+log.info "QueryString: " + queryString
+
+if( queryString.contains("stockholm") )
+{
+    // return the name of the response you want to dispatch
+    return "Response Stockholm"
+}
+else if( queryString.contains("london") )
+{
+    // return the name of the response you want to dispatch
+    return "Response London"
+}
+
+
+// Match based on header
+def acceptEncodingHeaderList = mockRequest.getRequestHeaders().get("Accept-Encoding")
+log.info "AcceptEncoding Header List: " + acceptEncodingHeaderList
+
+if( acceptEncodingHeaderList.contains("gzip,deflate") )
+{
+    // return the name of the response you want to dispatch
+    return "GZiped Response"
+}
+
+
+// Match based on body
+def requestBody = mockRequest.getRequestContent()
+log.info "Request body: " + requestBody
+
+if( requestBody.contains("some data") )
+{
+    // return the name of the response you want to dispatch
+    return "Response N"
+}
+*/
+</con:dispatchPath><con:response name="ResponseAdd" id="f151d999-fe88-42c2-867f-85c54b03fe00" httpResponseStatus="200"><con:settings/><con:responseContent><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<addPaymentsACHResponse>
+	<targetAccountNumber>12356ASDF78546</targetAccountNumber>
+	<targetBankCode>BK444</targetBankCode>
+	<operationIdentifier>SAVED</operationIdentifier>
+</addPaymentsACHResponse>]]></con:responseContent></con:response></con:restMockAction><con:restMockAction name="/NacionalPaymentsACH/CancelPayments" method="POST" resourcePath="/NacionalPaymentsACH/CancelPayments" id="cbec87ef-3cf9-4dc6-84e7-6feee304a951"><con:settings/><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:dispatchPath>/*
+// Script dispatcher is used to select a response based on the incoming request.
+// Here are few examples showing how to match based on path, query param, header and body
+
+// Match based on path
+def requestPath = mockRequest.getPath()
+log.info "Path: "+ requestPath
+
+if( requestPath.contains("json") )
+{
+    // return the name of the response you want to dispatch
+    return "JSON Response"
+}
+
+
+// Match based on query parameter
+def queryString = mockRequest.getRequest().getQueryString()
+log.info "QueryString: " + queryString
+
+if( queryString.contains("stockholm") )
+{
+    // return the name of the response you want to dispatch
+    return "Response Stockholm"
+}
+else if( queryString.contains("london") )
+{
+    // return the name of the response you want to dispatch
+    return "Response London"
+}
+
+
+// Match based on header
+def acceptEncodingHeaderList = mockRequest.getRequestHeaders().get("Accept-Encoding")
+log.info "AcceptEncoding Header List: " + acceptEncodingHeaderList
+
+if( acceptEncodingHeaderList.contains("gzip,deflate") )
+{
+    // return the name of the response you want to dispatch
+    return "GZiped Response"
+}
+
+
+// Match based on body
+def requestBody = mockRequest.getRequestContent()
+log.info "Request body: " + requestBody
+
+if( requestBody.contains("some data") )
+{
+    // return the name of the response you want to dispatch
+    return "Response N"
+}
+*/
+</con:dispatchPath><con:response name="ResponseCancel" id="7eb41bdc-5d03-4f48-99d8-c5b1d8d8d822" httpResponseStatus="200"><con:settings/><con:responseContent><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<cancelPaymentsACHResponse>
+	<value>140000</value>
+	<targetBankCode>BK444</targetBankCode>
+	<operationIdentifier>CANCELED</operationIdentifier>
+</cancelPaymentsACHResponse>]]></con:responseContent></con:response></con:restMockAction></con:restMockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
