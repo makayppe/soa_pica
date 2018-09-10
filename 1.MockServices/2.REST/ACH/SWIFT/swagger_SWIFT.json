@@ -1,0 +1,219 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Mock de servicios de SWIFT ",
+    "version": "1.0.0",
+    "title": "Swagger Taller SOA-Integración PICA",
+    "contact": {
+      "email": "yeselin@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/SWIFTinternacional",
+  "host": "127.0.0.1:9088",
+  "tags": [
+    {
+      "name": "InternacionalPaymentsSWIFT",
+      "description": "si el banco es nacional crea el pago en SWIFT internacional Payments."
+    }
+  ],
+  "paths": {
+    "/AddPayments": {
+      "post": {
+        "tags": [
+          "InternacionalPaymentsSWIFT"
+        ],
+        "summary": "crea el pago electrónico Internacional a través de SWIFT",
+        "description": "",
+        "operationId": "addPaymentsSWIFT",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto que es necesario para crear el pago",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/addPaymentsSWIFT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/addPaymentsSWIFTresponse"
+            }
+          },
+          "405": {
+            "description": "Entrada Inválida"
+          }
+        }
+      }
+    },
+    "/CancelPayments": {
+      "post": {
+        "tags": [
+          "InternacionalPaymentsSWIFT"
+        ],
+        "summary": "cancela el pago electrónico internacional a través de SWIFT",
+        "description": "",
+        "operationId": "cancelPaymentsSWIFT",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto que es necesario para cancelar el pago",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cancelPaymentsSWIFT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/cancelPaymentsSWIFTresponse"
+            }
+          },
+          "405": {
+            "description": "Entrada Inválida"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "addPaymentsSWIFT": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "valor del pago",
+          "example": 140000
+        },
+        "sourceAccountNumber": {
+          "type": "string",
+          "description": "número de cuenta origen",
+          "example": "12356ASDF333"
+        },
+        "sourceAccountType": {
+          "type": "string",
+          "description": "tipo de operación Origen",
+          "example": "SAVING"
+        },
+        "targetBankCode": {
+          "type": "string",
+          "description": "identificación del banco destino",
+          "example": "BK444"
+        },
+        "targetAccountNumber": {
+          "type": "string",
+          "description": "número de cuenta destino",
+          "example": "12356ASDF78546"
+        },
+        "targetAccountType": {
+          "type": "string",
+          "description": "tipo de operación Origen",
+          "example": "SAVING"
+        },
+        "operationIdentifier": {
+          "type": "string",
+          "description": "número que identifica la transacción",
+          "example": "SAVING"
+        }
+      }
+    },
+    "cancelPaymentsSWIFT": {
+      "type": "object",
+      "properties": {
+        "sourceAccountNumber": {
+          "type": "string",
+          "description": "número de cuenta origen",
+          "example": "12356ASDF333"
+        },
+        "targetAccountNumber": {
+          "type": "string",
+          "description": "número de cuenta destino",
+          "example": "12356ASDF78546"
+        },
+        "targetBankCode": {
+          "type": "string",
+          "description": "identificación del banco destino",
+          "example": "BK444"
+        },
+        "operationIdentifier": {
+          "type": "string",
+          "description": "identifica la transacción",
+          "example": "CANCELED"
+        }
+      }
+    },
+    "cancelPaymentsSWIFTresponse": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "valor del pago",
+          "example": 140000
+        },
+        "targetBankCode": {
+          "type": "string",
+          "description": "identificación del banco destino",
+          "example": "BK444"
+        },
+        "operationIdentifier": {
+          "type": "string",
+          "description": "identifica la transacción",
+          "example": "CANCELED"
+        }
+      }
+    },
+    "addPaymentsSWIFTresponse": {
+      "type": "object",
+      "properties": {
+        "targetAccountNumber": {
+          "type": "string",
+          "description": "número de cuenta destino",
+          "example": "12356ASDF78546"
+        },
+        "targetBankCode": {
+          "type": "string",
+          "description": "identificación del banco destino",
+          "example": "BK444"
+        },
+        "operationIdentifier": {
+          "type": "string",
+          "description": "identifica la transacción",
+          "example": "SAVED"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
