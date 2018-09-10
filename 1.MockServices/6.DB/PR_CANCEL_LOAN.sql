@@ -1,4 +1,5 @@
-CREATE OR REPLACE PROCEDURE PR_CANCEL_LOAN (P_USER IN VARCHAR2 DEFAULT USER
+CREATE OR REPLACE PROCEDURE PR_CANCEL_LOAN (P_USER IN VARCHAR2 DEFAULT USER,
+                                            P_ID_LOAD IN VARCHAR2
 )  AUTHID CURRENT_USER IS
 /******************************************************************************
    NAME:       PR_CANCEL_LOAN
@@ -64,24 +65,14 @@ begin
    v_comment_ := 'Cancelando';
    DBMS_OUTPUT.PUT_LINE(v_comment_);
    Commit;
-   --execute immediate ('TRUNCATE TABLE STG.T_LOAN');
-/*    INSERT INTO STG.T_LOAN (ID_LOAD,
-                           TYPE_ID_PEOPLE,
-						   ID_PEOPLE,
-						   DATE_INSERT_LOAD,
-                           AMOUNT_LOAD,
-						   DESC_LOAD,
-						   STATUS_LOAD) 
-                  VALUES (SEQ_LOAN.nextval,
-                           P_TYPE_ID_PEOPLE,
-						   P_ID_PEOPLE,
-						   TRUNC(SYSDATE),
-                           P_AMOUNT_LOAD,
-						   P_DESCRIPTION_LOAD,
-						   1); */
 
-   v_total_delete_rows := v_total_delete_rows + SQL%ROWCOUNT;
-   v_comment_ := 'Registros Cancelados: '|| TO_CHAR(v_total_delete_rows);
+   UPDATE STG.T_LOAN
+   SET DATE_MODIFY_LOAD = TRUNC(SYSDATE) , STATUS_LOAD = 0
+   WHERE ID_LOAD = P_ID_LOAD;
+   
+
+   v_total_update_rows := v_total_update_rows + SQL%ROWCOUNT;
+   v_comment_ := 'Registros Cancelados: '|| TO_CHAR(v_total_update_rows);
    DBMS_OUTPUT.PUT_LINE(v_comment_);
    commit;
 
