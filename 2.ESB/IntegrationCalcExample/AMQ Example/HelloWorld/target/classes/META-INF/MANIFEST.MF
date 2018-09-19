@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1537368495222
+Build-Jdk: 1.8.0_181
+Built-By: marco.caipe
+Bundle-Blueprint: OSGI-INF/blueprint/blueprint.xml
+Bundle-Description: Camel Content-Based Router Example
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: Camel Content-Based Router Example [HelloWorld]
+Bundle-SymbolicName: HelloWorld
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Import-Package: org.apache.activemq,org.apache.activemq.camel.component,
+ org.apache.activemq.pool,org.apache.camel.component.jms,org.osgi.servic
+ e.blueprint;version="[1.0.0,2.0.0)"
+Tool: Bnd-3.2.0.201605172007
