@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:camel="http://camel.apache.org/schema/blueprint"
+	xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd http://camel.apache.org/schema/blueprint/cxf https://camel.apache.org/schema/cxf/camel-cxf-blueprint.xsd  http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+	<camelContext id="cbr-example-context"
+		xmlns="http://camel.apache.org/schema/blueprint">
+
+		<route id="cbr-route">
+			<camel:from id="_from1" uri="file:work/cbr/input" />
+			<camel:log id="_log1" message="Receiving order" />
+			<camel:to id="_to1"
+				uri="mina2:tcp://172.24.224.9:9701?textline=true&amp;sync=false" />
+		</route>
+	</camelContext>
+</blueprint>
