@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/spring">
+		<route id="simple-route">
+			<from id="route-timer" uri="timer://foo?period=1000" />
+			<setBody id="_setBody1">
+				<constant>
+                    SELECT * FROM PICA.TESTING
+                </constant>
+			</setBody>
+			<to id="_to1" uri="jdbc:dataSource" />
+			<log id="route-log" message=">>> ${body}" />
+		</route>
+	</camelContext>
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		id="dataSource">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:pica/pica.jboss@18.235.170.55:1521:ORCL" />
+	</bean>
+	<bean class="org.springframework.jdbc.core.JdbcTemplate"
+		id="jdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+</beans>

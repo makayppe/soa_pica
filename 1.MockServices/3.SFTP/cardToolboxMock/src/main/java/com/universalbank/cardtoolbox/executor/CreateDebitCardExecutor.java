@@ -55,7 +55,7 @@ public class CreateDebitCardExecutor {
 		}
 	}
 
-	@Scheduled(fixedRateString = "${app.fixedRate}")
+	@Scheduled(fixedRateString = "6000")
 	public void scheduleTaskWithFixedRate() {
 		logger.info("Fixed Rate Task :: Execution Time - {}", dateTimeFormatter.format(LocalDateTime.now()));
 		InputStream inputStream = null;
@@ -122,13 +122,13 @@ public class CreateDebitCardExecutor {
 	}
 
 	private void connect() throws IOException {
-		ftpClient.connect(properties.getHostname(), properties.getServerPort());
+		ftpClient.connect("127.0.0.1", 2121);
 		if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
 			ftpClient.disconnect();
 			throw new IOException("Exception in connecting to FTP Server");
 		}
 
-		ftpClient.login(properties.getUserName(), properties.getPassword());
+		ftpClient.login("universalbank", "universalbank");
 		ftpClient.enterLocalPassiveMode();
 		ftpClient.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
 		ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
