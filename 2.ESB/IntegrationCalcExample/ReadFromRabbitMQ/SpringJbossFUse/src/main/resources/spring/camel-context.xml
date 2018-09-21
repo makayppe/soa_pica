@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/spring">
+		<route id="simple-route">
+			<from uri="rabbitmq://localhost:5672/testingPica?autoDelete=false&amp;queue=testingQueue&amp;routingKey=camel" />
+			<log id="route-log" message=">>> ${body}"/>
+		</route>
+	</camelContext>
+	<bean id="customConnectionFactory"
+		class="com.rabbitmq.client.ConnectionFactory">
+		<property name="host" value="localhost" />
+		<property name="port" value="5672" />
+		<property name="username" value="guest" />
+		<property name="password" value="guest" />
+	</bean>
+</beans>
