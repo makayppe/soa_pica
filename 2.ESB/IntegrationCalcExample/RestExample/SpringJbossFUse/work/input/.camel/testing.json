@@ -1,0 +1,9 @@
+{
+  "value": 140000,
+  "sourceAccountNumber": "12356ASDF333",
+  "sourceAccountType": "SAVING",
+  "targetBankCode": "BK444",
+  "targetAccountNumber": "12356ASDF78546",
+  "targetAccountType": "SAVING",
+  "operationIdentifier": "SAVING"
+}

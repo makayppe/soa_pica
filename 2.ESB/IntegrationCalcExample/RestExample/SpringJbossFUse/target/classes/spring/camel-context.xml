@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="simple-route">
+            <from id="from_1" uri="file://C:\Users\marco.caipe\workspace\SpringJbossFUse\work\input"/>
+            <log id="in-message" message=">>> ${body}"/>
+            <to id="_to1" uri="restlet:http://localhost:9088/SWIFTinternacional/CancelPayments?restletMethod=POST"/>
+            <log id="route-log" message="respuesta >>> ${body}"/>
+        </route>
+    </camelContext>
+</beans>
