@@ -1,0 +1,64 @@
+<xsd:schema targetNamespace="http://universalBank.com/schema/businessdomain/customer/v1-0"
+	elementFormDefault="qualified"
+	xmlns="http://universalBank.com/schema/businessdomain/customer/v1-0"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:complexType name="customer">
+		<xsd:complexContent>
+			<xsd:sequence>
+				<xsd:element name="name" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="lastName" type="xsd:string" minOccurs="0"/>
+				<xsd:element name="id" type="xsd:string" minOccurs="0" />
+				<xsd:element name="idType" type="xsd:string" minOccurs="0" />
+				<xsd:element name="account" type="account" minOccurs="1" />
+				<xsd:element name="paymentMethod" type="paymentMethod" minOccurs="0" />
+				<xsd:element name="operationMethod" type="operationMethod" minOccurs="1" />
+				<xsd:element name="operationId" type="operationId" minOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="account">
+		<xsd:sequence>
+			<xsd:element name="bankCode" type="xsd:string" minOccurs="0">
+			</xsd:element>
+			<xsd:element name="accountType" type="xsd:string" minOccurs="0">
+			</xsd:element>
+			<xsd:element name="cardNumber" type="xsd:dateTime"
+				minOccurs="0">
+			</xsd:element>
+			<xsd:element name="cardType" type="xsd:dateTime"
+				minOccurs="0">				
+			</xsd:element>
+			<xsd:element name="franchise" type="xsd:string"
+				minOccurs="0">
+			</xsd:element>
+			<xsd:element name="quota" type="xsd:string" minOccurs="0">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="paymentMethod">
+		<xsd:sequence>
+			<xsd:element name="value" type="xsd:string" minOccurs="0">
+			</xsd:element>
+			<xsd:element name="paymentType" type="xsd:string" minOccurs="0">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="dateTime">
+		<xsd:sequence>
+			<xsd:element name="date" type="xsd:date" minOccurs="0">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>	
+
+	<xsd:complexType name="operationMethod">
+		<xsd:sequence>
+			<xsd:element name="operationType" type="xsd:int" minOccurs="0">
+			</xsd:element>
+			<xsd:element name="operationId" type="xsd:int" minOccurs="0">
+			</xsd:element>			
+		</xsd:sequence>
+	</xsd:complexType>		
+</xsd:schema>
