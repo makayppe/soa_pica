@@ -12,21 +12,21 @@
 	</xsd:element>
 	<xsd:complexType name="requestType">
 		<xsd:sequence>
-			<xsd:element name="office" type="xsd:string"
+			<xsd:element name="office-line-code" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="source" type="xsd:string"
+			<xsd:element name="source-account-number" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="source" type="xsd:string"
+			<xsd:element name="source-account-type" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="target" type="xsd:string"
+			<xsd:element name="target-account-number" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="target" type="xsd:string"
+			<xsd:element name="target-account-type" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="payment" type="xsd:string"
+			<xsd:element name="payment-value" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
 			<xsd:element name="date" type="xsd:string" minOccurs="1"
 				maxOccurs="1" />
-			<xsd:element name="operation" type="xsd:string"
+			<xsd:element name="operation-identifier" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
