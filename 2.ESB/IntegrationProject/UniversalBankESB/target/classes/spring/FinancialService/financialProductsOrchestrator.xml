@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+        <property name="brokerURL" value="tcp://52.71.119.146:61616"/>
+        <property name="userName" value="dev1"/>
+        <property name="password" value="dev1"/>
+    </bean>
+    <bean class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop" id="pooledConnectionFactory"
+        init-method="start" primary="true">
+        <property name="maxConnections" value="8"/>
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+    <bean class="org.apache.camel.component.jms.JmsConfiguration" id="jmsConfig">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="concurrentConsumers" value="10"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+    <camel:routeContext id="financialProductsOrchestrator"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-service-product-orchestrator" streamCache="true">
+            <camel:from id="_from1" uri="direct:financial-service-product-orchestrator"/>
+            <camel:log
+                id="_logInputMessageFinancialProductsOrchestrator" message="Financial Products Orchestrator Input message >>> ${body}"/>
+            <camel:setProperty id="bodyBackUp_2" propertyName="bodyBackUp">
+                <camel:xpath>/fs:BusinessEvent</camel:xpath>
+            </camel:setProperty>
+            <camel:choice id="_choiceFinancialProductOperation">
+                <camel:when id="_whenIsSavingCheckingAccount">
+                    <camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:account/cust:accountType/text() = "SAVING_ACCOUNT" or /fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:account/cust:accountType/text() = "CHECKING_ACCOUNT"</camel:xpath>
+                    <camel:choice id="_choiceAddAccountOrCancel">
+                        <camel:when id="_whenIsAddAccount">
+                            <camel:xpath>contains(/fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:operation/cust:operationType/text(),"add")</camel:xpath>
+                            <camel:to id="_toStratusTransform" uri="xslt:spring/FinancialService/Transformation/Business_To_Stratus.xsl"/>
+                            <camel:to id="_toStratusServer" uri="activemq:queue:jms/stratus/accountSystem"/>
+                            <camel:setBody id="_setBodyBackOrchestratorProduct1">
+                                <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                            </camel:setBody>
+                            <camel:to id="_toCardTransform1" uri="direct:financial-cards-orchestrator"/>
+                        </camel:when>
+                    </camel:choice>
+                </camel:when>
+                <camel:when id="_whenIsCard">
+                    <camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:cards/cust:accountType/text() = "ATM_CARD" or /fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:account/cust:accountType/text() = "CREDIT_CARD"</camel:xpath>
+                    <camel:to id="_toCardTransform2" uri="direct:financial-cards-orchestrator"/>
+                </camel:when>
+                <camel:when id="_whenIsLoan">
+                    <camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:loans/fs:account/cust:accountType/text() = "PERSONAL_LOAN"</camel:xpath>
+                    <camel:to id="_toPersonalLoanOrchestrator" uri="direct:financial-personal-loan-orchestrator"/>
+                </camel:when>
+            </camel:choice>
+            <camel:setBody id="_setBodyBackOrchestratorProduct2">
+                <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+            </camel:setBody>
+        </camel:route>
+    </camel:routeContext>
+</beans>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camel:routeContext id="RabbitMQChannelAdapter"
+        xmlns:c="http://universal-bank/crm/enterprise-model/framework/1.0.0" xmlns:ns0="http://universalBank.com/schema/businessdomain/v1-0">
+        <camel:route id="protocolo-rabbit-mq-channel-adapter" streamCache="true">
+            <camel:from id="_from1" uri="rabbitmq://localhost:5672/UNIVERSAL_BANK_BROKER?autoDelete=false&amp;connectionTimeout=0&amp;declare=false&amp;durable=false&amp;queue=FINANCUAL_MQ_INPUT_ESB&amp;routingKey=UNIVERSAL_BANK_CHANNEL&amp;exchangePattern=InOnly"/>
+            <camel:log id="_log1" message="Input Message Adapter RabbitMQ >>> ${body}"/>
+            <camel:to id="_to1" uri="xslt:spring/Transformation/CRM_To_CanonicalModel.xsl"/>
+            <camel:split id="_split1">
+                <camel:xpath>/ns0:body/ns0:BusinessEvent</camel:xpath>
+                <camel:log id="_log2" message="Output Message Adapter RabbitMQ >>> ${body}"/>
+                <camel:to id="_to2" uri="direct:financial-service-routing"/>
+            </camel:split>
+        </camel:route>
+    </camel:routeContext>
+    <bean class="com.rabbitmq.client.ConnectionFactory" id="customConnectionFactory">
+        <property name="host" value="localhost"/>
+        <property name="port" value="5672"/>
+        <property name="username" value="guest"/>
+        <property name="password" value="guest"/>
+    </bean>
+</beans>

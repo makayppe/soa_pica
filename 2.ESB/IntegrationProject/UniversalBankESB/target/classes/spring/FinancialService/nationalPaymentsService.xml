@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camel:routeContext id="nationalPaymentsService"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-nationalPayment-service" streamCache="true">
+            <camel:from id="_fromNationalServiceOrchestrator" uri="direct:financial-nationalPayment-service"/>
+            <camel:log id="_logInputMessageFinancialNationalPayment" message="National Payment Service Input message >>> ${body}"/>
+            <camel:to id="_toNationalPaymentServer" uri="restlet:http://52.71.119.146:9080/NacionalPaymentsACH/AddPayments?restletMethod=POST"/>
+            <camel:log id="_logOutputMessageFinancialNationalPayment" message="National Payment Service Output message >>> ${body}"/>
+        </camel:route>
+    </camel:routeContext>
+</beans>

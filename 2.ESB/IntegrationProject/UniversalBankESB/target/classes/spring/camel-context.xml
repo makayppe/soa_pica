@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- ================================================================= -->
+    <!-- EXTERNAL ROUTES -->
+    <!-- ================================================================= -->
+    <import resource="RabbitMQChannelAdapter.xml"/>
+    <import resource="FinancialService/financialService.xml"/>
+    <import resource="FinancialService/financialProductsOrchestrator.xml"/>
+    <import resource="FinancialService/financialCardsOrchestrator.xml"/>
+    <import resource="FinancialService/financialPersonalLoanOrchestrator.xml"/>
+    <import resource="FinancialService/financialServicesOrchestrator.xml"/>
+    <import resource="FinancialService/localPaymentServices.xml"/>
+    <import resource="FinancialService/nationalPaymentsService.xml"/>
+    <import resource="FinancialService/internationalPaymentService.xml"/>
+    <camel:camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <camel:routeContextRef ref="RabbitMQChannelAdapter"/>
+        <camel:routeContextRef ref="financialService"/>
+        <camel:routeContextRef ref="financialProductsOrchestrator"/>
+        <camel:routeContextRef ref="financialCardsOrchestrator"/>
+        <camel:routeContextRef ref="financialPersonalLoanOrchestrator"/>
+        <camel:routeContextRef ref="financialServicesOrchestrator"/>
+        <camel:routeContextRef ref="localPaymentServices"/>
+        <camel:routeContextRef ref="nationalPaymentsService"/>
+         <camel:routeContextRef ref="internationalPaymentService"/>
+    </camel:camelContext>
+</beans>
+

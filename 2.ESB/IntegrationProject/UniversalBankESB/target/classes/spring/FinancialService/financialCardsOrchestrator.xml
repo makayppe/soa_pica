@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+        <property name="brokerURL" value="tcp://52.71.119.146:61616"/>
+        <property name="userName" value="dev1"/>
+        <property name="password" value="dev1"/>
+    </bean>
+    <bean class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop" id="pooledConnectionFactory"
+        init-method="start" primary="true">
+        <property name="maxConnections" value="8"/>
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+    <bean class="org.apache.camel.component.jms.JmsConfiguration" id="jmsConfig">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="concurrentConsumers" value="10"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+    <camel:routeContext id="financialCardsOrchestrator"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-cards-orchestrator" streamCache="true">
+            <camel:from id="_fromFinancial-cards-Orchestrator" uri="direct:financial-cards-orchestrator"/>
+            <camel:log id="_logInputMessageFinancialCardsOrchestrator" message="Financial Cards Orchestrator Input message >>> ${body}"/>
+            <camel:setProperty id="bodyBackUpCards" propertyName="bodyBackUp">
+                <camel:xpath>/fs:BusinessEvent</camel:xpath>
+            </camel:setProperty>
+            <camel:choice id="_choiceAddCardOrCancel">
+                <camel:when id="_whenIsAddCard">
+                    <camel:xpath>contains(/fs:BusinessEvent/fs:BusinessEventRequest/fs:products/fs:accounts/fs:operation/cust:operationType/text(),"add")</camel:xpath>
+                    <camel:to id="_toToolBoxTransform" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_ToolBox.xsl"/>
+                    <camel:setBody id="_setBodyStratusTransform">
+                        <camel:xpath>/FTP_PLAIN_TEXT/text()</camel:xpath>
+                    </camel:setBody>
+                    <camel:to id="_toFTPToolBoxServer" uri="ftp:52.71.119.146:2121/creditcard/create/request?disconnect=true&amp;fileName=createCard${date:now:yyyyMMddHHmmssSS}.txt&amp;passiveMode=true&amp;exchangePattern=InOnly&amp;disconnectOnBatchComplete=true&amp;stepwise=false&amp;password=universalbank&amp;username=universalbank"/>
+                    <camel:setBody id="_setBodyBackOrchestratorCard1">
+                        <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                    </camel:setBody>
+                    <camel:to id="_toATPTransform" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_ATP.xsl"/>
+                    <camel:setBody id="_setBodyATPTransform">
+                        <camel:xpath>/TCP_PLAIN_TEXT/text()</camel:xpath>
+                    </camel:setBody>
+                    <camel:to id="_toATPServer" uri="mina2:tcp://52.71.119.146:9701?disconnect=true&amp;timeout=60000&amp;textline=true"/>
+                    <camel:setBody id="_setBodyBackOrchestratorCard2">
+                        <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                    </camel:setBody>
+                </camel:when>
+            </camel:choice>
+        </camel:route>
+    </camel:routeContext>
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camel:routeContext id="localPaymentServices"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-localPayment-service" streamCache="true">
+            <camel:from id="_fromFinancialServiceOrchestrator" uri="direct:financial-localPayment-service"/>
+            <camel:log id="_logInputMessageFinancialLocalPayment" message="LocalPayment Services Orchestrator Input message >>> ${body}"/>
+            <camel:to id="_toLocalPaymentServer" uri="cxf:bean:localPayments?dataFormat=MESSAGE"/>
+            <camel:log id="_logOutputMessageFinancialLocalPayment" message="LocalPayment Services Orchestrator Output message >>> ${body}"/>
+        </camel:route>
+    </camel:routeContext>
+    <cxf:cxfEndpoint
+        address="http://52.71.119.146:8081/web-sandbox-api/endpoints/local-payments-1.0.0"
+        endpointName="s:LocalPaymentsSOAP" id="localPayments"
+        serviceName="s:LocalPayments"
+        wsdlURL="http://52.71.119.146:8081/web-sandbox-api/endpoints/local-payments-1.0.0?wsdl" xmlns:s="http://LocalPayments/systems"/>
+</beans>

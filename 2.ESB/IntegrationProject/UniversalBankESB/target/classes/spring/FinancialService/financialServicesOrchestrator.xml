@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<camel:routeContext
+		id="financialServicesOrchestrator"
+		xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+		xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0"
+		xmlns:sys="http://ScoreValidation/systems">
+		<camel:route id="financial-service-services-orchestrator"
+			streamCache="true">
+			<camel:from id="_fromFinancialServiceOrchestrator"
+				uri="direct:financial-service-services-orchestrator" />
+			<camel:log
+				id="_logInputMessageFinancialPServicesOrchestrator"
+				message="Financial Services Orchestrator Input message >>> ${body}" />
+			<camel:setProperty
+				id="bodyBackUpServiceOrchestrator" propertyName="bodyBackUp">
+				<camel:xpath>/fs:BusinessEvent</camel:xpath>
+			</camel:setProperty>
+			<camel:choice id="_choiceServicesOrchestrator">
+				<camel:when id="_whenIsDomesticPAyment">
+					<camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:service/fs:Payment/fs:operation/cust:operationType/text()="DOMESTIC_PAYMENT" or /fs:BusinessEvent/fs:BusinessEventRequest/fs:service/fs:Payment/fs:operation/cust:operationType/text()="ACCOUNT_TO_ACCOUNT_PAYMENT"</camel:xpath>
+					<camel:to id="_toLocalPaymentTransform"
+						uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_DomesticPayment.xsl" />
+					<camel:to id="_toLocalPayment"
+						uri="direct:financial-localPayment-service" />
+				</camel:when>
+				<camel:when id="_whenIsElectronicPayment">
+					<camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:service/fs:Payment/fs:operation/cust:operationType/text()="ELECTRONIC_PAYMENT"</camel:xpath>
+					<camel:choice
+						id="_choiceInternationalOrNationalPayment">
+						<camel:when
+							id="_whenIsNationalPaymentOrInternationalPayment">
+							<camel:xpath>contains('BK444,BK445,BK446,BK447',/fs:BusinessEvent/fs:BusinessEventRequest/fs:service/fs:payment/fs:targetAccount/cust:bankCode/text())=true</camel:xpath>
+							<camel:to id="_NationalPaymentTransform"
+								uri="xslt:spring/FinancialService/Transformation/Business_To_ACH.xsl" />
+							<camel:to id="_toNationalPayment"
+								uri="direct:financial-nationalPayment-service" />
+						</camel:when>
+						<camel:otherwise id="_otherwiseIsInternational">
+							<camel:log id="-testingfasfda"
+								message="ENTRO A INTERNATIONAL >>> ${body}" />
+							<camel:to id="_toInternationallPaymentTransform"
+								uri="xslt:spring/FinancialService/Transformation/Business_ToInternationalPayment.xsl" />
+							<camel:to id="_toJsonTransform"
+								uri="xslt:spring/FinancialService/Transformation/xml_To_Json.xsl" />
+							<camel:to id="_toInternationalPayment"
+								uri="direct:financial-InternationalPayment-service" />
+						</camel:otherwise>
+					</camel:choice>
+				</camel:when>
+			</camel:choice>
+			<camel:setBody id="_setBodyBackUpServiceOrchestrator2">
+				<camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+			</camel:setBody>
+		</camel:route>
+	</camel:routeContext>
+	<cxf:cxfEndpoint
+		address="http://52.71.119.146:8081/web-sandbox-api/endpoints/local-payments-1.0.0"
+		endpointName="s:LocalPaymentsSOAP" id="localPayments"
+		serviceName="s:LocalPayments"
+		wsdlURL="http://52.71.119.146:8081/web-sandbox-api/endpoints/local-payments-1.0.0?wsdl"
+		xmlns:s="http://LocalPayments/systems" />
+</beans>

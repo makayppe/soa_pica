@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:pica/pica.jboss@18.235.170.55:1521:ORCL"/>
+    </bean>
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <camel:routeContext id="financialPersonalLoanOrchestrator"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-personal-loan-orchestrator" streamCache="true">
+            <camel:from id="_fromPersonalLoan" uri="direct:financial-personal-loan-orchestrator"/>
+            <camel:log
+                id="_logInputMessageFinancialPersonalLoanOrchestrator" message="Financial Loan Orchestrator Input message >>> ${body}"/>
+            <camel:setProperty id="bodyBackUpLoan1" propertyName="bodyBackUp">
+                <camel:xpath>/fs:BusinessEvent</camel:xpath>
+            </camel:setProperty>
+            <camel:to id="_toLoanWizardTransform" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_LoanWizard.xsl"/>
+            <camel:setBody id="_setBodyPersonalLoanTransform">
+                <camel:xpath>/SQL-SP/text()</camel:xpath>
+            </camel:setBody>
+            <camel:to id="_toLoanWizard" uri="jdbc:dataSource"/>
+        </camel:route>
+    </camel:routeContext>
+</beans>

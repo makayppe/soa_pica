@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camel:routeContext id="financialService"
+        xmlns:cust="http://universalBank.com/schema/businessdomain/customer/v1-0"
+        xmlns:fs="http://universalBank.com/schema/businessdomain/v1-0" xmlns:sys="http://ScoreValidation/systems">
+        <camel:route id="financial-service-routing" streamCache="true">
+            <camel:from id="_from1" uri="direct:financial-service-routing"/>
+            <camel:log id="_log3" message="Input Message Financial Services >>> ${body}"/>
+            <camel:setProperty id="bodyBackUp" propertyName="bodyBackUp">
+                <camel:xpath>/fs:BusinessEvent</camel:xpath>
+            </camel:setProperty>
+            <camel:choice id="_choice1">
+                <camel:when id="_when1">
+                    <camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber = null or fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber = '' or contains('NMSA854,NMSA855,NMSA856',fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber/text())=false</camel:xpath>
+                    <camel:log id="_log4" message="Line number no existe"/>
+                </camel:when>
+                <camel:when id="_when2">
+                    <camel:xpath>boolean(/fs:BusinessEvent/fs:BusinessEventRequest) = false </camel:xpath>
+                    <camel:log id="_log5" message="Financial Action no tiene DomainEvent"/>
+                </camel:when>
+                <camel:otherwise id="_otherwise1">
+                    <camel:to id="_toScoreValidatorTransform" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_ScoreValidator.xsl"/>
+                    <camel:to id="_to3" uri="cxf:bean:ScoreValidator?dataFormat=MESSAGE"/>
+                    <camel:choice id="StoreValidationChoice">
+                        <camel:when id="_whenScoreValidationPass">
+                            <camel:xpath>//sys:score/text()!="A"</camel:xpath>
+                            <camel:log id="_logFinancialStoreValidator" message="Cliente reportado ante Financial Store Validator"/>
+                        </camel:when>
+                        <camel:otherwise id="_otherwise2">
+                            <camel:setBody id="_setBody1">
+                                <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                            </camel:setBody>
+                            <camel:log id="_logOutputFinancialService" message="Financial Service Output message >>> ${body}"/>
+                            <camel:to
+                                id="_toFinancialProductsOrchestrator" uri="direct:financial-service-product-orchestrator"/>
+                            <camel:to
+                                id="_toFinancialServicesOrchestrator" uri="direct:financial-service-services-orchestrator"/>
+                        </camel:otherwise>
+                    </camel:choice>
+                </camel:otherwise>
+            </camel:choice>
+        </camel:route>
+    </camel:routeContext>
+    <cxf:cxfEndpoint
+        address="http://52.71.119.146:8082/web-sandbox-api/endpoints/score-validator-1.0.0"
+        endpointName="s:ScoreValidationSOAP" id="ScoreValidator"
+        serviceName="s:ScoreValidation"
+        wsdlURL="http://52.71.119.146:8082/web-sandbox-api/endpoints/score-validator-1.0.0?wsdl" xmlns:s="http://ScoreValidation/systems"/>
+</beans>
