@@ -225,6 +225,10 @@
 													<xsl:value-of
 														select="/ns1:CRMBusinessEvent/ns1:enterpriseOperationEventObject/ns1:financialActionDomainObject/ns1:financialService/ns1:type" />
 												</customer-v1-0:operationType>
+												<customer-v1-0:transactionType>
+													<xsl:value-of
+														select="/ns1:CRMBusinessEvent/ns1:enterpriseOperationEventObject/ns1:financialActionDomainObject/ns1:financialService/ns1:enterpriseServicesDomainEvents/ns2:cancelDomainEvent/ns2:operationIdentifier" />
+												</customer-v1-0:transactionType>
 												<customer-v1-0:operationId>
 													<xsl:value-of
 														select="/ns1:CRMBusinessEvent/ns1:enterpriseOperationEventObject/@enterpriseOperationKey" />

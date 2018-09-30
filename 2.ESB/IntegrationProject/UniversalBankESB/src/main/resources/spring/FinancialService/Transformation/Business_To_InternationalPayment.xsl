@@ -2,12 +2,13 @@
 	xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
 	xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
 	xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
-	xmlns:sys="http://StratusAccount/systems"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:cus="http://www.oracle.com/XSL/Transform/java/oracle.fabric.common.xml.xpath.DomainValueMapper"
 	xmlns:customer-v1-0="http://universalBank.com/schema/businessdomain/customer/v1-0"
 	xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
 	xmlns:cross="http://www.oracle.com/XSL/Transform/java/oracle.fabric.common.xml.xpath.CrossReferences"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:ora="http://schemas.oracle.com/xpath/extension"
 	xmlns:socket="http://www.oracle.com/XSL/Transform/java/oracle.tip.adapter.socket.ProtocolTranslator"
 	xmlns:common-v1-0="http://universalBank.com/schema/businessdomain/common/v1-0"
@@ -23,25 +24,39 @@
 	xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:ns0="http://universalBank.com/schema/businessdomain/v1-0"
+	xmlns:sys="http://LocalPayments/systems"
 	xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
-	exclude-result-prefixes="xsi xsl customer-v1-0 common-v1-0 xsd ns0 sys bpws xp20 bpel cus bpm cross ora socket mhdr oraext dvm par hwf med ids xdk xref ldap">
-
+	exclude-result-prefixes="xsi xsl customer-v1-0 common-v1-0 xsd ns0 soap wsdl sys bpws xp20 bpel cus bpm cross ora socket mhdr oraext dvm par hwf med ids xdk xref ldap">
 	<xsl:template match="/">
-		<xsl:if
-			test='contains(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:loans/ns0:operation/customer-v1-0:operationType/text(),"add")'>
-			<SQL-SP>
+		<crearPago>
+			<value>
 				<xsl:value-of
-					select='concat("BEGIN PR_CREATE_LOAN (&apos;01&apos;,&apos;",/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id/text(),"&apos;,&apos;01&apos;,&apos;",/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:loans/ns0:account/customer-v1-0:founds,"&apos;, &apos;Prueba de Prestamo&apos;);COMMIT;END;")' />
-			</SQL-SP>
-		</xsl:if>
-		<xsl:if
-			test='contains(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:loans/ns0:operation/customer-v1-0:operationType/text(),"cancel")'>
-			<SQL-SP>
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:payment/customer-v1-0:value" />
+			</value>
+			<sourceAccountNumber>
 				<xsl:value-of
-					select='concat("BEGIN PR_CANCEL_LOAN (&apos;",/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id,"&apos;,&apos;2&apos;);COMMIT;END")' />
-			</SQL-SP>
-		</xsl:if>
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:account/customer-v1-0:accountNumber" />
+			</sourceAccountNumber>
+			<sourceAccountType>
+				<xsl:value-of
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:account/customer-v1-0:accountType" />
+			</sourceAccountType>
+			<targetBankCode>
+				<xsl:value-of
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:payment/ns0:account/customer-v1-0:bankCode" />
+			</targetBankCode>
+			<targetAccountNumber>
+				<xsl:value-of
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:targetAccount/customer-v1-0:accountNumber" />
+			</targetAccountNumber>
+			<targetAccountType>
+				<xsl:value-of
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:targetAccount/customer-v1-0:accountType" />
+			</targetAccountType>
+			<operationIdentifier>
+				<xsl:value-of
+					select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:service/ns0:Payment/ns0:operation/customer-v1-0:operationId" />
+			</operationIdentifier>
+		</crearPago>
 	</xsl:template>
 </xsl:stylesheet>
-
-

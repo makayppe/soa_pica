@@ -51,6 +51,24 @@
                         <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
                     </camel:setBody>
                 </camel:when>
+                <camel:otherwise id="_otherwisISCancel">
+                    <camel:to id="_toToolBoxTransformCancel" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_ToolBox.xsl"/>
+                    <camel:setBody id="_setBodyStratusTransformCancel">
+                        <camel:xpath>/FTP_PLAIN_TEXT/text()</camel:xpath>
+                    </camel:setBody>
+                    <camel:to id="_toFTPToolBoxServerCancel" uri="ftp:52.71.119.146:2121/creditcard/create/request?disconnect=true&amp;fileName=createCard${date:now:yyyyMMddHHmmssSS}.txt&amp;passiveMode=true&amp;exchangePattern=InOnly&amp;disconnectOnBatchComplete=true&amp;stepwise=false&amp;password=universalbank&amp;username=universalbank"/>
+                    <camel:setBody id="_setBodyBackOrchestratorCardCancel1">
+                        <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                    </camel:setBody>
+                    <camel:to id="_toATPTransformCancel" uri="xslt:spring/FinancialService/Transformation/BusinessEvent_To_ATP.xsl"/>
+                    <camel:setBody id="_setBodyATPTransformCancel">
+                        <camel:xpath>/TCP_PLAIN_TEXT/text()</camel:xpath>
+                    </camel:setBody>
+                    <camel:to id="_toATPCancelServer" uri="mina2:tcp://52.71.119.146:9701?disconnect=true&amp;timeout=60000&amp;textline=true"/>
+                    <camel:setBody id="_setBodyBackOrchestratorCardCancel2">
+                        <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                    </camel:setBody>
+                </camel:otherwise>
             </camel:choice>
         </camel:route>
     </camel:routeContext>

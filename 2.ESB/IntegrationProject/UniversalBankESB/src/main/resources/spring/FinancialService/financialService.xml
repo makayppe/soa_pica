@@ -13,12 +13,12 @@
             <camel:setProperty id="bodyBackUp" propertyName="bodyBackUp">
                 <camel:xpath>/fs:BusinessEvent</camel:xpath>
             </camel:setProperty>
-            <camel:choice id="_choice1">
-                <camel:when id="_when1">
+            <camel:choice id="_choiceIfMessageHasToBeProceessed">
+                <camel:when id="_whenExistsLineNumber">
                     <camel:xpath>/fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber = null or fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber = '' or contains('NMSA854,NMSA855,NMSA856',fs:BusinessEvent/fs:BusinessEventRequest/fs:customer/cust:lineNumber/text())=false</camel:xpath>
                     <camel:log id="_log4" message="Line number no existe"/>
                 </camel:when>
-                <camel:when id="_when2">
+                <camel:when id="_whenExistsFinancialAction">
                     <camel:xpath>boolean(/fs:BusinessEvent/fs:BusinessEventRequest) = false </camel:xpath>
                     <camel:log id="_log5" message="Financial Action no tiene DomainEvent"/>
                 </camel:when>

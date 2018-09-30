@@ -6,13 +6,13 @@
     <camel:routeContext id="RabbitMQChannelAdapter"
         xmlns:c="http://universal-bank/crm/enterprise-model/framework/1.0.0" xmlns:ns0="http://universalBank.com/schema/businessdomain/v1-0">
         <camel:route id="protocolo-rabbit-mq-channel-adapter" streamCache="true">
-            <camel:from id="_from1" uri="rabbitmq://localhost:5672/UNIVERSAL_BANK_BROKER?autoDelete=false&amp;connectionTimeout=0&amp;declare=false&amp;durable=false&amp;queue=FINANCUAL_MQ_INPUT_ESB&amp;routingKey=UNIVERSAL_BANK_CHANNEL&amp;exchangePattern=InOnly"/>
-            <camel:log id="_log1" message="Input Message Adapter RabbitMQ >>> ${body}"/>
-            <camel:to id="_to1" uri="xslt:spring/Transformation/CRM_To_CanonicalModel.xsl"/>
-            <camel:split id="_split1">
+            <camel:from id="_fromCRM" uri="rabbitmq://localhost:5672/UNIVERSAL_BANK_BROKER?autoDelete=false&amp;connectionTimeout=0&amp;declare=false&amp;durable=false&amp;queue=FINANCUAL_MQ_INPUT_ESB&amp;routingKey=UNIVERSAL_BANK_CHANNEL&amp;exchangePattern=InOnly"/>
+            <camel:log id="_logCRMInput" message="Input Message Adapter RabbitMQ >>> ${body}"/>
+            <camel:to id="_toCanonicalModelTransform" uri="xslt:spring/Transformation/CRM_To_CanonicalModel.xsl"/>
+            <camel:split id="_splitIncomingMEssage">
                 <camel:xpath>/ns0:body/ns0:BusinessEvent</camel:xpath>
-                <camel:log id="_log2" message="Output Message Adapter RabbitMQ >>> ${body}"/>
-                <camel:to id="_to2" uri="direct:financial-service-routing"/>
+                <camel:log id="_logOutputCanonicalMessage" message="Output Message Adapter RabbitMQ >>> ${body}"/>
+                <camel:to id="_toFinancialServiceRouting" uri="direct:financial-service-routing"/>
             </camel:split>
         </camel:route>
     </camel:routeContext>

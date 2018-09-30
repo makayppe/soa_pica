@@ -38,7 +38,7 @@
 			test='contains(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:loans/ns0:operation/customer-v1-0:operationType/text(),"cancel")'>
 			<SQL-SP>
 				<xsl:value-of
-					select='concat("BEGIN PR_CANCEL_LOAN (&apos;",/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id,"&apos;,&apos;1142&apos;);COMMIT;END")' />
+					select='concat("BEGIN PR_CANCEL_LOAN (&apos;",/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id,"&apos;,&apos;2&apos;);COMMIT;END")' />
 			</SQL-SP>
 		</xsl:if>
 	</xsl:template>

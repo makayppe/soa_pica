@@ -27,38 +27,40 @@
 	exclude-result-prefixes="xsi xsl customer-v1-0 common-v1-0 xsd ns0 sys bpws xp20 bpel cus bpm cross ora socket mhdr oraext dvm par hwf med ids xdk xref ldap">
 
 	<xsl:template match="/">
-		<!--  <ID>
-			<xsl:value-of
-				select="format-number(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id, '000000')" />
-		</ID>
-		<FULL_NAME>
-			<xsl:value-of
-				select="substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:name, '                                        '), 1, 40)" />
-		</FULL_NAME>
-		<ACCOUNT_NUMBER>
-			<xsl:value-of
-				select="format-number(2300043430030403, '0000000000000000')" />
-		</ACCOUNT_NUMBER>
-		<BRANCH_OFFICE_NUMBER>
-			<xsl:value-of
-				select="substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7)" />
-		</BRANCH_OFFICE_NUMBER>
-		<IS_COMPANY>
-			<xsl:value-of
-				select="substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:isCompany , '     '), 1, 5)" />
-		</IS_COMPANY>
-		<DATE>
-			<xsl:value-of
-				select="/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date" />
-		</DATE>
-		<OPERATION_ID>
-			<xsl:value-of
-				select="substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4)" />
-		</OPERATION_ID>-->
-		<FTP_PLAIN_TEXT>
-			<xsl:value-of
-				select="concat(format-number(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id, '000000'),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:name, '                                        '), 1, 40),format-number(2300043430030403, '0000000000000000'),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:isCompany , '     '), 1, 5), /ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date,substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4))" />
-		</FTP_PLAIN_TEXT>
+		<xsl:if
+			test='contains(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationType/text(),"cancel")'>
+			<xsl:if
+				test='/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:cardType/text()="DEBIT"'>
+				<FTP_PLAIN_TEXT>
+					<xsl:value-of
+						select="concat(format-number(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id, '000000'),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:name, '                                        '), 1, 40),format-number(2300043430030403, '0000000000000000'),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7),substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:isCompany , '     '), 1, 5), /ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date,substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4))" />
+				</FTP_PLAIN_TEXT>
+			</xsl:if>
+			<xsl:if
+				test='/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:cardType/text()="CREDIT"'>
+				<FTP_PLAIN_TEXT>
+					<xsl:value-of
+						select="concat(format-number(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id, '000000'), substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:name, '                                        '), 1, 40), substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7), substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:isCompany , '     '), 1, 5), format-number(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:id, '00000000'), substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:franchise, '                    '), 1, 4), substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:cardType, '          '), 1, 4), /ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date, substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4))" />
+				</FTP_PLAIN_TEXT>
+			</xsl:if>
+		</xsl:if>
+		<xsl:if
+			test='contains(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationType/text(),"cancel")'>
+			<xsl:if
+				test='/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:cardType/text()="DEBIT"'>
+				<FTP_PLAIN_TEXT>
+					<xsl:value-of
+						select="concat(substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7), '1234567812345678', /ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date, substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4))" />
+				</FTP_PLAIN_TEXT>
+			</xsl:if>
+			<xsl:if
+				test='/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:account/customer-v1-0:cardType/text()="CREDIT"'>
+				<FTP_PLAIN_TEXT>
+					<xsl:value-of
+						select="concat(substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:customer/customer-v1-0:lineNumber, '       '), 1, 7), '1234567812345678', /ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:date/customer-v1-0:date, substring(concat(/ns0:BusinessEvent/ns0:BusinessEventRequest/ns0:products/ns0:cards/ns0:operation/customer-v1-0:operationId , '    '), 1, 4))" />
+				</FTP_PLAIN_TEXT>
+			</xsl:if>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>
 

@@ -45,6 +45,14 @@
                             </camel:setBody>
                             <camel:to id="_toCardTransform1" uri="direct:financial-cards-orchestrator"/>
                         </camel:when>
+                        <camel:otherwise id="_otherwiseCancelAccount">
+                       		 <camel:to id="_toStratusCancelTransform" uri="xslt:spring/FinancialService/Transformation/Business_To_StratusCancel.xsl"/>
+                            <camel:to id="_toStratusCancelServer" uri="activemq:queue:jms/stratus/accountSystem"/>
+                            <camel:setBody id="_setBodyBackOrchestratorProductCancel">
+                                <camel:simple>${exchangeProperty[bodyBackUp]}</camel:simple>
+                            </camel:setBody>
+                            <camel:to id="_toCardTransformCancel" uri="direct:financial-cards-orchestrator"/>
+                        </camel:otherwise>
                     </camel:choice>
                 </camel:when>
                 <camel:when id="_whenIsCard">
