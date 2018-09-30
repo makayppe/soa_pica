@@ -8,48 +8,56 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import ATPActivateSystem.server.services.ATPService;
 
 public class ActivationSystemSocket {
 
 	private ServerSocket server;
-	
 
-	public ActivationSystemSocket(String ipAddress) throws UnknownHostException, IOException {
-		if(ipAddress != null & !ipAddress.isEmpty())
-			this.server = new ServerSocket(9701,1,InetAddress.getByName(ipAddress));
-		else
-			this.server =new ServerSocket(9701, 1, InetAddress.getLocalHost());
-	
+	public ActivationSystemSocket(String ipAddress) {
+		try {
+			if (ipAddress != null & !ipAddress.isEmpty())
+				this.server = new ServerSocket(9701, 1, InetAddress.getByName(ipAddress));
+			else
+				this.server = new ServerSocket(9701, 1, InetAddress.getLocalHost());
+		} catch (Exception e) {
+			String response = "error en comunicacion";
+			System.out.println(response);
+		}
 	}
-	
-	public void listen() throws Exception{
-		String data = null;
-        Socket client = this.server.accept();
-        String clientAddress = client.getInetAddress().getHostAddress();
-        System.out.println("\r\nNew connection from " + clientAddress);
-        OutputStream output = client.getOutputStream();
-        
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(client.getInputStream()));        
-        while ( (data = in.readLine()) != null ) {
-        	ATPService atpService = new ATPService();
-        	String response = atpService.seriveOperation(data);
-        	System.out.println("Message from " + clientAddress + " message " + data);
-        	PrintWriter writer = new PrintWriter(output, true);
-        	writer.println(response);
-        }
+
+	public void listen() {
+		Socket client = null;
+		try {
+			
+			while (true) {
+				client = this.server.accept();
+				String clientAddress = client.getInetAddress().getHostAddress();
+				System.out.println("\r\nNew connection from " + clientAddress);
+				Task task = new Task(client);
+				task.start();
+			}
+			
+		} catch (Exception e) {
+			String response = "error en comunicacion";
+			System.out.println(response);
+		}finally {
+			if(client != null) {
+				try {
+					this.server.close();
+				} catch (IOException e) {
+				}
+			}
+		}
 	}
-	
+
 	public InetAddress getSocketAddress() {
-        return this.server.getInetAddress();
-    }
-    
-    public int getPort() {
-        return this.server.getLocalPort();
-    }
+		return this.server.getInetAddress();
+	}
 
+	public int getPort() {
+		return this.server.getLocalPort();
+	}
 
 }
